@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Protected Page</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            color: #333;
+        }
+        input {
+            padding: 12px;
+            margin: 15px 0;
+            width: calc(100% - 24px);
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #667eea;
+        }
+        button {
+            padding: 12px;
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .message {
+            margin-top: 15px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Password</h2>
+        <input type="password" id="password" placeholder="Enter password" required>
+        <button onclick="checkPassword()">Submit</button>
+        <p class="message" id="message"></p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("password").value;
+            const message = document.getElementById("message");
+
+            if (password === "catchingphish") {
+                // Final URL is encoded and revealed only at runtime
+                const encodedUrl = "aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbQ=="; // base64 of https://www.google.com
+                const url = atob(encodedUrl);
+
+                // Use a hidden iframe to perform redirect outside of visible URL
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.srcdoc = `<!DOCTYPE html><html><body><form id='f' method='POST' action='${url}'></form><script>document.getElementById('f').submit();<\/script></body></html>`;
+                document.body.appendChild(iframe);
+
+                // Optional: inform user while redirect happens invisibly
+                message.style.color = 'green';
+                message.textContent = "Redirecting...";
+            } else {
+                message.textContent = "Incorrect password. Try again.";
+            }
+        }
+    </script>
+</body>
+</html>
