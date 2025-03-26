@@ -73,17 +73,16 @@
             const message = document.getElementById("message");
 
             if (password === "catchingphish") {
-                // Final URL is encoded and revealed only at runtime
-                const encodedUrl = "aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbQ=="; // base64 of https://www.google.com
-                const url = atob(encodedUrl);
+                // URL in plain text but redirect is still client-side
+                const url = "https://catchingphish.com/secure-file";
 
-                // Use a hidden iframe to perform redirect outside of visible URL
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.srcdoc = `<!DOCTYPE html><html><body><form id='f' method='POST' action='${url}'></form><script>document.getElementById('f').submit();<\/script></body></html>`;
-                document.body.appendChild(iframe);
+                // Create and submit a form to prevent simple redirect tracing
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                document.body.appendChild(form);
+                form.submit();
 
-                // Optional: inform user while redirect happens invisibly
                 message.style.color = 'green';
                 message.textContent = "Redirecting...";
             } else {
